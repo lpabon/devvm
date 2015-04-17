@@ -1,0 +1,43 @@
+- name: update system
+  sudo: yes
+  yum: name=* state=latest
+
+- name: install development tools
+  sudo: yes
+  yum: name="@Development tools" state=present
+
+- name: install other dev tools
+  sudo: yes
+  yum: name={{ item }} state=present
+  with_items:
+    - golang
+    - cmockery2
+    - cmockery2-devel
+
+- name: copy screenrc
+  copy: src=screenrc dest=/home/vagrant/.screenrc
+
+- name: copy .bashrc
+  copy: src=bashrc dest=/home/vagrant/.bashrc
+
+- name: copy vimrc
+  copy: src=vimrc dest=/home/vagrant/.vimrc
+
+- name: setup vim
+  unarchive: src=vim.tar.gz dest=/home/vagrant
+
+- name: copy ssh
+  copy: src={{ lookup('env','HOME') }}/.ssh/id_rsa dest=/home/vagrant/.ssh/id_rsa owner=vagrant group=vagrant mode=0600
+
+- name: create gopath directory
+  file: path=/home/vagrant/git/go state=directory
+
+- name: go get pblcache
+  command: go get github.com/pblcache/pblcache
+
+- name: go get pblcache deps
+  command: go get -v ./... chdir=/home/vagrant/git/go/src/github.com/pblcache/pblcache
+
+- name: setup fork pblcache
+  command: git remote add github git@github.com:lpabon/pblcache.git chdir=/home/vagrant/git/go/src/github.com/pblcache/pblcache
+

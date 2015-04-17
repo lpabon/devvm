@@ -1,0 +1,157 @@
+" We use a vim
+set nocompatible
+"
+" Colo(u)red or not colo(u)red
+" If you want color you should set this to true
+"
+let color = "true"
+"
+if has("gui")
+   " No tearoff menus
+   set guioptions-=t
+
+   " No toolbar
+   set guioptions-=T
+
+   " Always use both toolbars to help X maintian window size
+   set guioptions-=L
+   set guioptions+=r
+
+   "Icon
+   set guioptions+=l
+
+   " Use console dialogs
+   set guioptions+=c
+
+   " No automatic fork to the background
+   set guioptions+=f
+   if has("gui")
+       "set guifont=Fixed\ [Misc]/11/-1/5/50/0/0/0/1/0
+       set guifont=Monospace\ 11
+   elseif has("unix")
+         set guifont=-adobe-courier-medium-r-normal-*-*-120-*-*-m-*-hp-roman8
+   endif
+   
+   " Don't use autoselect in non-unix environments
+   if !has("unix")
+      set guioptions-=a
+   endif
+
+   if has("win32")
+      set lines=50
+      set columns=100
+   endif
+
+   " ALT-SPACE is System menu
+   nmap <M-Space> :simalt ~<CR>
+   imap <M-Space> <C-O>:simalt ~<CR>
+   cmap <M-Space> <C-C>:simalt ~<CR>
+
+   " Colors
+   "if v:version >= 600
+   colorscheme northsky
+   colorscheme northsky
+   "else
+   "   set background=light
+   "   source ~/.vim/colors/northsky.vim
+   "endif
+
+   syntax on
+else
+    if has("syntax")
+        if color == "true"
+            " This will switch colors ON
+            "so ${VIMRUNTIME}/syntax/syntax.vim
+            "colorscheme evening
+            colorscheme default
+        syntax on
+        else
+            " this switches colors OFF
+            syntax off
+            set t_Co=0
+        endif
+    endif
+endif
+
+if has("autocmd")
+   if v:version >= 600
+      " Enable file type detection.
+      " Use the default filetype settings, so that mail gets 'tw' set to 72,
+      " 'cindent' is on in C files, etc.
+      " Also load indent files, to automatically do language-dependent indenting.
+      filetype plugin indent on
+    endif
+endif
+
+set textwidth=120
+set wrapmargin=120 
+"set mouse=a
+set nomousefocus
+set mousehide
+set backspace=2 whichwrap+=<,>,[,] 
+set history=50
+set viminfo='20,\"50,n$HOME/.viminfo
+set visualbell
+set autoindent
+set smartindent 
+set sw=4
+set tabstop=4
+set smarttab                                                                                                                             
+"set list
+set expandtab                                                                                                                            
+set shiftround                                                                                                                           
+set ruler                                                                                                                                
+set showmode                                                                                                                             
+set showcmd                                                                                                                              
+set tildeop                                                                                                                              
+set showmatch                                                                                                                            
+set nowrap                                                                                                                               
+set nosol                                                                                                                                
+set autowrite                                                                                                                            
+set wc=9                                                                                                                                 
+set wcm=0                                                                                                                                
+set nowmnu                                                                                                                               
+set wildmenu                                                                                                                             
+set tags=tags,./tags                                                                                                                     
+set nohlsearch                                                                                                                           
+set incsearch                                                                                                                            
+set showcmd                                                                                                                              
+set cmdheight=1                                                                                                                          
+set cmdwinheight=10                                                                                                                      
+set gdefault                                                                                                                             
+set infercase                                                                                                                            
+set splitbelow                                                                                                                           
+set splitright                                                                                                                          
+set hidden                                                                                                                               
+"set textwidth=0                                                                                                                          
+set laststatus=2                                                                                                                         
+set lazyredraw   
+autocmd Filetype python setlocal list ts=4 expandtab sw=4
+autocmd Filetype markdown setlocal list ts=4 expandtab sw=4 textwidth=80
+
+"Cscope Quickfix
+let Cscope_JumpError = 0
+"let Cscope_PopupMenu = 1
+
+"Commands here
+"vsplit
+"wincmd h
+"split
+"wincmd j
+"wincmd l
+
+" Ctrl-S is save
+map <C-S> :w<CR>
+imap <C-S> <C-O><C-S>
+vmap <C-S> <C-C><C-S>
+
+" Leader commands
+map <leader>bn  :bn<CR>
+map <leader>ls  :ls<CR>
+
+" File explorer
+map <leader>x :Explore<CR>
+map <leader>sx :Sexplore<CR>
+
+" ~/.vimrc ends here
+
