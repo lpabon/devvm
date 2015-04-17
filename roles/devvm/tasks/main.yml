@@ -15,29 +15,44 @@
     - cmockery2-devel
 
 - name: copy screenrc
-  copy: src=screenrc dest=/home/vagrant/.screenrc
+  copy: src=screenrc dest=/home/vagrant/.screenrc force=no
 
 - name: copy .bashrc
-  copy: src=bashrc dest=/home/vagrant/.bashrc
+  copy: src=bashrc dest=/home/vagrant/.bashrc force=no
 
 - name: copy vimrc
-  copy: src=vimrc dest=/home/vagrant/.vimrc
+  copy: src=vimrc dest=/home/vagrant/.vimrc force=no
 
 - name: setup vim
-  unarchive: src=vim.tar.gz dest=/home/vagrant
+  unarchive: src=vim.tar.gz dest=/home/vagrant creates=/home/vagrant/.vim/doc/bufexplorer.txt
+
+- name: copy gitconfig
+  copy: src={{ lookup('env','HOME') }}/.gitconfig dest=/home/vagrant/.gitconfig owner=vagrant group=vagrant mode=0600 force=no
 
 - name: copy ssh
-  copy: src={{ lookup('env','HOME') }}/.ssh/id_rsa dest=/home/vagrant/.ssh/id_rsa owner=vagrant group=vagrant mode=0600
+  copy: src={{ lookup('env','HOME') }}/.ssh/id_rsa dest=/home/vagrant/.ssh/id_rsa owner=vagrant group=vagrant mode=0600 force=no
 
 - name: create gopath directory
   file: path=/home/vagrant/git/go state=directory
 
+- name: check pblcache
+  stat: path=/home/vagrant/git/go/src/github.com/pblcache/pblcache
+  register: pblcache_exists
+
 - name: go get pblcache
   command: go get github.com/pblcache/pblcache
+  when: not pblcache_exists.stat.exists
 
 - name: go get pblcache deps
   command: go get -v ./... chdir=/home/vagrant/git/go/src/github.com/pblcache/pblcache
+  when: not pblcache_exists.stat.exists
+
+- name: check fork
+  shell: git remote -v | grep github chdir=/home/vagrant/git/go/src/github.com/pblcache/pblcache
+  register: fork_result
+  ignore_errors: True
 
 - name: setup fork pblcache
   command: git remote add github git@github.com:lpabon/pblcache.git chdir=/home/vagrant/git/go/src/github.com/pblcache/pblcache
+  when: fork_result.rc != 0
 
