@@ -11,6 +11,7 @@
   yum: name={{ item }} state=present
   with_items:
     - autoconf
+    - kernel-devel
     - automake
     - libtool
     - make
