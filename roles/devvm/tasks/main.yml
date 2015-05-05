@@ -26,7 +26,7 @@
   copy: src=screenrc dest=/home/vagrant/.screenrc force=no
 
 - name: copy .bashrc
-  copy: src=bashrc dest=/home/vagrant/.bashrc force=no
+  copy: src=bashrc dest=/home/vagrant/.bashrc force=yes
 
 - name: copy vimrc
   copy: src=vimrc dest=/home/vagrant/.vimrc force=no
