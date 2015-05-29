@@ -21,6 +21,16 @@
     - golang
     - cmockery2
     - cmockery2-devel
+    - boost-devel
+    - glib2-devel
+    - zeromq3-devel
+    - libevent-devel
+    - gcc-c++
+    - nodejs
+    - npm
+    - indent
+    - ruby
+    - cscope
 
 - name: copy screenrc
   copy: src=screenrc dest=/home/vagrant/.screenrc force=no
