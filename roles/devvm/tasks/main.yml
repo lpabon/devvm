@@ -54,13 +54,8 @@
 - name: get govim ide
   git: repo=https://github.com/farazdagi/vim-go-ide.git dest=/home/vagrant/.vim_go_runtime
 
-- name: check for govim installation
-  stat: path=/home/vagrant/.vimrc.go
-  register: vimrc_go_exists
-
 - name: govim ide post_install
-  command: /home/vagrant/.vim_go_runtime/bin/install
-  when: not vimrc_go_exists.stat.exists
+  shell: /home/vagrant/.vim_go_runtime/bin/install creates=/home/vagrant/.vimrc.go
 
 - name: create gopath directory
   file: path=/home/vagrant/git/go state=directory
@@ -78,7 +73,7 @@
   when: not pblcache_exists.stat.exists
 
 - name: check fork
-  shell: git remote -v | grep github chdir=/home/vagrant/git/go/src/github.com/pblcache/pblcache
+  shell: git remote -v | grep lpabon chdir=/home/vagrant/git/go/src/github.com/pblcache/pblcache
   register: fork_result
   ignore_errors: True
 
