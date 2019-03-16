@@ -2,8 +2,6 @@
 export GOPATH=$HOME/git/go
 export PATH=$PATH:$GOPATH/bin
 export EDITOR=vim
-alias cdp='cd $GOPATH/src/github.com/pblcache/pblcache'
-alias vimgo='vim -u ~/.vimrc.go'
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then

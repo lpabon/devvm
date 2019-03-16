@@ -1,8 +1,34 @@
-" We use a vim
-set nocompatible
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'fatih/vim-go'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'bronson/vim-trailing-whitespace'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
 "
-" Colo(u)red or not colo(u)red
-" If you want color you should set this to true
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
 "
 let color = "true"
 "
@@ -25,9 +51,9 @@ if has("gui")
 
    " No automatic fork to the background
    set guioptions+=f
-   if has("gui")
+   if has("gui_kde")
        "set guifont=Fixed\ [Misc]/11/-1/5/50/0/0/0/1/0
-       set guifont=Monospace\ 11
+       set guifont=Andale\ Mono/10/-1/5/50/0/0/0/1/0
    elseif has("unix")
          set guifont=-adobe-courier-medium-r-normal-*-*-120-*-*-m-*-hp-roman8
    endif
@@ -88,6 +114,7 @@ set wrapmargin=120
 "set mouse=a
 set nomousefocus
 set mousehide
+set laststatus=2
 set backspace=2 whichwrap+=<,>,[,] 
 set history=50
 set viminfo='20,\"50,n$HOME/.viminfo
@@ -96,38 +123,37 @@ set autoindent
 set smartindent 
 set sw=4
 set tabstop=4
-set smarttab                                                                                                                             
-"set list
-set expandtab                                                                                                                            
-set shiftround                                                                                                                           
-set ruler                                                                                                                                
-set showmode                                                                                                                             
-set showcmd                                                                                                                              
-set tildeop                                                                                                                              
-set showmatch                                                                                                                            
-set nowrap                                                                                                                               
-set nosol                                                                                                                                
-set autowrite                                                                                                                            
-set wc=9                                                                                                                                 
-set wcm=0                                                                                                                                
-set nowmnu                                                                                                                               
-set wildmenu                                                                                                                             
-set tags=tags,./tags                                                                                                                     
-set nohlsearch                                                                                                                           
-set incsearch                                                                                                                            
-set showcmd                                                                                                                              
-set cmdheight=1                                                                                                                          
-set cmdwinheight=10                                                                                                                      
-set gdefault                                                                                                                             
-set infercase                                                                                                                            
-set splitbelow                                                                                                                           
-set splitright                                                                                                                          
-set hidden                                                                                                                               
-"set textwidth=0                                                                                                                          
-set laststatus=2                                                                                                                         
-set lazyredraw   
-autocmd Filetype python setlocal list ts=4 expandtab sw=4
-autocmd Filetype markdown setlocal list ts=4 expandtab sw=4 textwidth=80
+set smarttab
+set number
+highlight LineNr ctermfg=darkgrey
+"set expandtab 
+set shiftround
+set ruler
+set showmode
+set showcmd 
+set tildeop 
+set showmatch
+set nowrap
+set nosol
+set autowrite
+set wc=9
+set wcm=0 
+set nowmnu
+set wildmenu
+set tags=tags,./tags
+set nohlsearch
+set incsearch
+set showcmd 
+set cmdheight=1
+set cmdwinheight=10
+set gdefault
+set infercase
+set splitbelow
+set splitright
+set hidden
+"set textwidth=0 
+set laststatus=2
+set lazyredraw 
 
 "Cscope Quickfix
 let Cscope_JumpError = 0
@@ -153,5 +179,20 @@ map <leader>ls  :ls<CR>
 map <leader>x :Explore<CR>
 map <leader>sx :Sexplore<CR>
 
-" ~/.vimrc ends here
+" CVS menu
+map <leader>cd :call CVSdiff()<CR>
+"map <leader>cd :call CVSgetdiff()<CR>
+map <leader>ca :call CVSannotate()<CR>
+map <leader>cl :call CVSlog()<CR>
+
+" Outline plugin
+map <leader>ou :OUTLINE<CR>
+au FileType proto setl sw=2 ts=2 expandtab list
+au FileType yaml setl expandtab list
+au BufNewFile,BufRead *.gtpl setl expandtab list
+
+map ,, :cn<CR>
+map ,p :cp<CR>
+map ,c :ccl<CR>
+map ,o :copen<CR>
 

@@ -1,37 +1,71 @@
 - name: update system
-  sudo: yes
   yum: name=* state=latest
-
-- name: install development tools
-  sudo: yes
-  yum: name="@Development tools" state=present
+  become: yes
 
 - name: install other dev tools
-  sudo: yes
-  yum: name={{ item }} state=present
-  with_items:
+  yum:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+    - cmake
+    - gcc-c++
+    - python3-devel
+    - python2-devel
     - mercurial
     - screen
-    - autoconf
-    - kernel-devel
-    - automake
-    - libtool
     - make
-    - gcc
     - vim
     - golang
-    - cmockery2
-    - cmockery2-devel
-    - boost-devel
-    - glib2-devel
-    - zeromq3-devel
-    - libevent-devel
-    - gcc-c++
-    - nodejs
+    - ntp
+    - git
+    - wget
+    - ncurses-term
     - npm
-    - indent
-    - ruby
-    - cscope
+    - dnf-plugins-core
+    - python3-libselinux
+    - python2-libselinux
+    - python
+  become: yes
+
+- name: disable selinux
+  selinux: state=disabled
+  become: yes
+
+- name: disable of selinux - now
+  command: setenforce 0
+  become: yes
+  ignore_errors: True
+
+
+- name: remove all old docker
+  yum:
+    name:
+    - docker
+    - docker-client
+    - docker-client-latest
+    - docker-common
+    - docker-latest
+    - docker-logrotate
+    - docker-engine
+    state: removed
+    disable_gpg_check: yes
+  become: yes
+
+- name: install docker ce dnf repo
+  command: dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+  become: yes
+
+- name: install docker ce
+  yum: name=docker-ce state=present disable_gpg_check=yes
+  become: yes
+
+- name: enable services
+  service: name={{ item }} state=started enabled=yes
+  become: yes
+  with_items:
+    - docker
+    - ntpd
 
 - name: copy screenrc
   copy: src=screenrc dest=/home/vagrant/.screenrc force=no
@@ -42,42 +76,12 @@
 - name: copy vimrc
   copy: src=vimrc dest=/home/vagrant/.vimrc force=no
 
-- name: setup vim
-  unarchive: src=vim.tar.gz dest=/home/vagrant creates=/home/vagrant/.vim/doc/bufexplorer.txt
-
 - name: copy gitconfig
   copy: src={{ lookup('env','HOME') }}/.gitconfig dest=/home/vagrant/.gitconfig owner=vagrant group=vagrant mode=0600 force=no
 
-- name: copy ssh
-  copy: src={{ lookup('env','HOME') }}/.ssh/id_rsa dest=/home/vagrant/.ssh/id_rsa owner=vagrant group=vagrant mode=0600 force=no
-
-- name: get govim ide
-  git: repo=https://github.com/farazdagi/vim-go-ide.git dest=/home/vagrant/.vim_go_runtime
-
-- name: govim ide post_install
-  shell: /home/vagrant/.vim_go_runtime/bin/install creates=/home/vagrant/.vimrc.go
+- name: get vundle
+  git: repo=https://github.com/VundleVim/Vundle.vim.git dest=/home/vagrant/.vim/bundle/Vundle.vim
 
 - name: create gopath directory
-  file: path=/home/vagrant/git/go state=directory
-
-- name: check pblcache
-  stat: path=/home/vagrant/git/go/src/github.com/pblcache/pblcache
-  register: pblcache_exists
-
-- name: go get pblcache
-  command: go get github.com/pblcache/pblcache
-  when: not pblcache_exists.stat.exists
-
-- name: go get pblcache deps
-  command: go get -v ./... chdir=/home/vagrant/git/go/src/github.com/pblcache/pblcache
-  when: not pblcache_exists.stat.exists
-
-- name: check fork
-  shell: git remote -v | grep lpabon chdir=/home/vagrant/git/go/src/github.com/pblcache/pblcache
-  register: fork_result
-  ignore_errors: True
-
-- name: setup fork pblcache
-  command: git remote add github git@github.com:lpabon/pblcache.git chdir=/home/vagrant/git/go/src/github.com/pblcache/pblcache
-  when: fork_result.rc != 0
+  file: path=/home/vagrant/git/golang state=directory
 

@@ -5,7 +5,3 @@ hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)
 
 screen -t local1 0
 screen -t local2 1
-#screen -t heka7 2 /home/lpabon/bin/ssh-heka 07
-#screen -t heka9 3 /home/lpabon/bin/ssh-heka 09
-#screen -t heka10 4 /home/lpabon/bin/ssh-heka 10
-#screen -t heka11 5 /home/lpabon/bin/ssh-heka 11
